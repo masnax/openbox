@@ -1739,14 +1739,14 @@ void client_update_normal_hints(ObClient *self)
         if (size.flags & PWinGravity)
             self->gravity = size.win_gravity;
 
-        if (size.flags & PAspect) {
+/*        if (size.flags & PAspect) {
             if (size.min_aspect.y)
                 self->min_ratio =
                     (gfloat) size.min_aspect.x / size.min_aspect.y;
             if (size.max_aspect.y)
                 self->max_ratio =
                     (gfloat) size.max_aspect.x / size.max_aspect.y;
-        }
+        }*/
 
         if (size.flags & PMinSize)
             SIZE_SET(self->min_size, size.min_width, size.min_height);
@@ -1757,8 +1757,8 @@ void client_update_normal_hints(ObClient *self)
         if (size.flags & PBaseSize)
             SIZE_SET(self->base_size, size.base_width, size.base_height);
 
-        if (size.flags & PResizeInc && size.width_inc && size.height_inc)
-            SIZE_SET(self->size_inc, size.width_inc, size.height_inc);
+/*        if (size.flags & PResizeInc && size.width_inc && size.height_inc)
+            SIZE_SET(self->size_inc, size.width_inc, size.height_inc);*/
 
         ob_debug("Normal hints: min size (%d %d) max size (%d %d)",
                  self->min_size.width, self->min_size.height,
