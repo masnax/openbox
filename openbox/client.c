@@ -1736,8 +1736,8 @@ void client_update_normal_hints(ObClient *self)
         self->positioned = (size.flags & (PPosition|USPosition));
         self->sized = (size.flags & (PSize|USSize));
 
-        if (size.flags & PWinGravity)
-            self->gravity = size.win_gravity;
+//        if (size.flags & PWinGravity)
+//            self->gravity = size.win_gravity;
 
 /*        if (size.flags & PAspect) {
             if (size.min_aspect.y)
