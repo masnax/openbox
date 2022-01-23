@@ -2525,7 +2525,7 @@ static void client_change_wm_state(ObClient *self)
 
 static void client_change_state(ObClient *self)
 {
-    gulong netstate[12];
+    gulong netstate[13];
     guint num;
 
     num = 0;
@@ -4053,6 +4053,15 @@ gboolean client_focus(ObClient *self)
            passed in a bad time for _NET_WM_ACTIVE_WINDOW. */
         XSetInputFocus(obt_display, self->window, RevertToPointerRoot,
                        event_time());
+
+				gulong netstate[1];
+				if (focus_client) {
+					netstate[0] = 0;
+				  OBT_PROP_SETA32(focus_client->window, NET_WM_STATE, ATOM, netstate, 1);
+				}
+
+				netstate[0] = OBT_PROP_ATOM(NET_WM_STATE_FOCUSED);
+				OBT_PROP_SETA32(self->window, NET_WM_STATE, ATOM, netstate, 1);
     }
 
     if (self->focus_notify) {

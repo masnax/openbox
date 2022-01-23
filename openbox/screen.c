@@ -270,6 +270,7 @@ gboolean screen_annex(void)
     supported[i++] = OBT_PROP_ATOM(NET_WM_STATE_SKIP_PAGER);
     supported[i++] = OBT_PROP_ATOM(NET_WM_STATE_HIDDEN);
     supported[i++] = OBT_PROP_ATOM(NET_WM_STATE_FULLSCREEN);
+    supported[i++] = OBT_PROP_ATOM(NET_WM_STATE_FOCUSED);
     supported[i++] = OBT_PROP_ATOM(NET_WM_STATE_ABOVE);
     supported[i++] = OBT_PROP_ATOM(NET_WM_STATE_BELOW);
     supported[i++] = OBT_PROP_ATOM(NET_WM_STATE_DEMANDS_ATTENTION);
