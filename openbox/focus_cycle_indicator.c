@@ -107,6 +107,16 @@ void focus_cycle_indicator_startup(gboolean reconfig)
     a_focus_indicator->texture[2].data.lineart.color = color_white;
     a_focus_indicator->texture[3].type = RR_TEXTURE_LINE_ART;
     a_focus_indicator->texture[3].data.lineart.color = color_white;
+
+
+  XTextProperty name;
+  char *list[] = {"openbox_focus_cycle_indicator"};
+  char **plist = list;
+  XStringListToTextProperty(plist, 1, &name);
+  XSetWMName(obt_display, focus_indicator.top.window, &name);
+  XSetWMName(obt_display, focus_indicator.bottom.window, &name);
+  XSetWMName(obt_display, focus_indicator.right.window, &name);
+  XSetWMName(obt_display, focus_indicator.left.window, &name);
 }
 
 void focus_cycle_indicator_shutdown(gboolean reconfig)
