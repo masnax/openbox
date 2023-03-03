@@ -46,6 +46,7 @@ struct _ObAppSettings
 
     GravityPoint position;
     gboolean pos_given;
+    gboolean pos_ceiling;
     gboolean pos_force;
 
     gint width_num;

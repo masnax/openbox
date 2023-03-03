@@ -159,6 +159,7 @@ void config_app_settings_copy_non_defaults(const ObAppSettings *src,
         /* monitor is copied above */
     }
 
+    dst->pos_ceiling = src->pos_ceiling;
     dst->width_num = src->width_num;
     dst->width_denom = src->width_denom;
     dst->height_num = src->height_num;
@@ -258,6 +259,15 @@ static void parse_single_per_app_settings(xmlNodePtr app,
     }
 
     if ((n = obt_xml_find_node(app->children, "size"))) {
+        if ((c = obt_xml_find_node(n->children, "ceiling"))) {
+            gchar *s = obt_xml_node_string(c);
+            if (!g_ascii_strcasecmp(s, "yes")) {
+                settings->pos_ceiling = TRUE;
+            }
+
+            g_free(s);
+        }
+
         if ((c = obt_xml_find_node(n->children, "width"))) {
             if (!obt_xml_node_contains(c, "default")) {
                 gchar *s = obt_xml_node_string(c);

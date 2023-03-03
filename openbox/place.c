@@ -314,24 +314,36 @@ static void place_per_app_setting_size(ObClient *client, Rect *screen,
     g_assert(settings->height_denom >= 0);
 
     if (settings->width_num) {
+        gint new_w = *w;
         ob_debug("setting width by per-app settings");
         if (!settings->width_denom)
-            *w = settings->width_num;
+            new_w = settings->width_num;
         else {
-            *w = screen->width * settings->width_num / settings->width_denom;
-            *w = MIN(*w, screen->width);
+            new_w = screen->width * settings->width_num / settings->width_denom;
+            new_w = MIN(new_w, screen->width);
+        }
+
+        if (!settings->pos_ceiling || new_w < *w) {
+          *w = new_w;
         }
     }
 
     if (settings->height_num) {
+        gint new_h = *h;
         ob_debug("setting height by per-app settings");
         if (!settings->height_denom)
-            *h = settings->height_num;
+            new_h = settings->height_num;
         else {
-            *h = screen->height * settings->height_num / settings->height_denom;
-            *h = MIN(*h, screen->height);
+            new_h = screen->height * settings->height_num / settings->height_denom;
+            new_h = MIN(new_h, screen->height);
+        }
+
+        if (!settings->pos_ceiling || new_h < *h) {
+          *h = new_h;
         }
     }
+
+
 }
 
 static gboolean place_transient_splash(ObClient *client, Rect *area,
