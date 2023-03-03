@@ -921,31 +921,26 @@ static ObAppSettings *client_get_settings_state(ObClient *self)
                  app->group_name != NULL || app->group_class != NULL ||
                  (signed)app->type >= 0);
 
-        if (app->name &&
-            !g_pattern_match(app->name, strlen(self->name), self->name, NULL))
+        gboolean negate_match_group_name = (app->neg && g_pattern_match(app->neg, strlen("group_name"), "group_name", NULL));
+        gboolean negate_match_group_class = (app->neg && g_pattern_match(app->neg, strlen("group_class"), "group_class", NULL));
+        gboolean negate_match_name = (app->neg && g_pattern_match(app->neg, strlen("name"), "name", NULL));
+        gboolean negate_match_class = (app->neg && g_pattern_match(app->neg, strlen("class"), "class", NULL));
+        gboolean negate_match_role = (app->neg && g_pattern_match(app->neg, strlen("role"), "role", NULL));
+        gboolean negate_match_title = (app->neg && g_pattern_match(app->neg, strlen("title"), "title", NULL));
+        gboolean negate_match_type = (app->neg && g_pattern_match(app->neg, strlen("type"), "type", NULL));
+        if (app->name && g_pattern_match(app->name, strlen(self->name), self->name, NULL) == negate_match_name)
             match = FALSE;
-        else if (app->group_name &&
-            !g_pattern_match(app->group_name,
-                             strlen(self->group_name), self->group_name, NULL))
+        else if (app->group_name && g_pattern_match(app->group_name, strlen(self->group_name), self->group_name, NULL) == negate_match_group_name)
             match = FALSE;
-        else if (app->class &&
-                 !g_pattern_match(app->class,
-                                  strlen(self->class), self->class, NULL))
+        else if (app->class && g_pattern_match(app->class, strlen(self->class), self->class, NULL) == negate_match_class)
             match = FALSE;
-        else if (app->group_class &&
-                 !g_pattern_match(app->group_class,
-                                  strlen(self->group_class), self->group_class,
-                                  NULL))
+        else if (app->group_class && g_pattern_match(app->group_class, strlen(self->group_class), self->group_class, NULL) == negate_match_group_class)
             match = FALSE;
-        else if (app->role &&
-                 !g_pattern_match(app->role,
-                                  strlen(self->role), self->role, NULL))
+        else if (app->role && g_pattern_match(app->role, strlen(self->role), self->role, NULL) == negate_match_role)
             match = FALSE;
-        else if (app->title &&
-                 !g_pattern_match(app->title,
-                                  strlen(self->title), self->title, NULL))
+        else if (app->title && g_pattern_match(app->title, strlen(self->title), self->title, NULL) == negate_match_title)
             match = FALSE;
-        else if ((signed)app->type >= 0 && app->type != self->type) {
+        else if ((signed)app->type >= 0 && (app->type == self->type) == negate_match_type) {
             match = FALSE;
         }
 

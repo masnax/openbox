@@ -41,6 +41,7 @@ struct _ObAppSettings
     GPatternSpec *group_class;
     GPatternSpec *group_name;
     GPatternSpec *title;
+    GPatternSpec *neg;
     ObClientType  type;
 
     GravityPoint position;

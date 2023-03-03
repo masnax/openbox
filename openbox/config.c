@@ -366,11 +366,12 @@ static void parse_per_app_settings(xmlNodePtr node, gpointer d)
         ObAppSettings *settings;
 
         gboolean name_set, class_set, role_set, title_set,
-            type_set, group_name_set, group_class_set;
+            type_set, group_name_set, group_class_set, neg_set;
         gchar *name = NULL, *class = NULL, *role = NULL, *title = NULL,
-            *type_str = NULL, *group_name = NULL, *group_class = NULL;
+            *type_str = NULL, *group_name = NULL, *group_class = NULL, *neg = NULL;
         ObClientType type;
 
+        neg_set = obt_xml_attr_string(app, "negate", &neg);
         class_set = obt_xml_attr_string(app, "class", &class);
         name_set = obt_xml_attr_string(app, "name", &name);
         group_class_set = obt_xml_attr_string(app, "groupclass", &group_class);
@@ -419,6 +420,8 @@ static void parse_per_app_settings(xmlNodePtr node, gpointer d)
             settings->role = g_pattern_spec_new(role);
         if (title_set)
             settings->title = g_pattern_spec_new(title);
+        if (neg_set)
+            settings->neg = g_pattern_spec_new(neg);
         if (type_set)
             settings->type = type;
 
@@ -429,6 +432,7 @@ static void parse_per_app_settings(xmlNodePtr node, gpointer d)
         g_free(role);
         g_free(title);
         g_free(type_str);
+        g_free(neg);
 
         parse_single_per_app_settings(app, settings);
         config_per_app_settings = g_slist_append(config_per_app_settings,
