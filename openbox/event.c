@@ -1165,6 +1165,11 @@ static void event_handle_client(ObClient *client, XEvent *e)
     }
     case ConfigureRequest:
     {
+        // Some apps don't react well to centering with ConfigureRequest, so set a reserved wm_class for them.
+        if (!strcmp(client->group_class, "ob_skip_configure")) {
+          break;
+        }
+
         /* dont compress these unless you're going to watch for property
            notifies in between (these can change what the configure would
            do to the window).
