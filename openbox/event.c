@@ -578,6 +578,13 @@ static void event_process(const XEvent *ec, gpointer data)
         else if (client != focus_client) {
             focus_left_screen = FALSE;
             frame_adjust_focus(client->frame, TRUE);
+            {
+              guint32 id;
+              OBT_PROP_GET32(obt_root(ob_screen), NET_ACTIVE_WINDOW, WINDOW, &id);
+              if (id != 0) {
+                OBT_PROP_SET32(obt_root(ob_screen), NET_LAST_ACTIVE_WINDOW, WINDOW, id);
+              }
+            }
             focus_set_client(client);
             client_calc_layer(client);
             client_bring_helper_windows(client);
@@ -611,6 +618,13 @@ static void event_process(const XEvent *ec, gpointer data)
             /* nothing is focused */
             focus_set_client(NULL);
         } else {
+            {
+              guint32 id;
+              OBT_PROP_GET32(obt_root(ob_screen), NET_ACTIVE_WINDOW, WINDOW, &id);
+              if (id != 0) {
+                OBT_PROP_SET32(obt_root(ob_screen), NET_LAST_ACTIVE_WINDOW, WINDOW, id);
+              }
+            }
             /* Focus moved, so mark that we are waiting to process that
                FocusIn */
             waiting_for_focusin = TRUE;

@@ -223,6 +223,7 @@ gboolean screen_annex(void)
     supported[i++] = OBT_PROP_ATOM(NET_DESKTOP_GEOMETRY);
     supported[i++] = OBT_PROP_ATOM(NET_DESKTOP_VIEWPORT);
     supported[i++] = OBT_PROP_ATOM(NET_ACTIVE_WINDOW);
+    supported[i++] = OBT_PROP_ATOM(NET_LAST_ACTIVE_WINDOW);
     supported[i++] = OBT_PROP_ATOM(NET_WORKAREA);
     supported[i++] = OBT_PROP_ATOM(NET_CLIENT_LIST);
     supported[i++] = OBT_PROP_ATOM(NET_CLIENT_LIST_STACKING);
