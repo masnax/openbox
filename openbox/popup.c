@@ -28,6 +28,8 @@
 #include "obrender/render.h"
 #include "obrender/theme.h"
 
+#include "obt/prop.h"
+
 ObPopup *popup_new(void)
 {
     XSetWindowAttributes attrib;
@@ -53,6 +55,24 @@ ObPopup *popup_new(void)
     XSetWindowBorderWidth(obt_display, self->bg, ob_rr_theme->obwidth);
     XSetWindowBorder(obt_display, self->bg,
                      RrColorPixel(ob_rr_theme->osd_border_color));
+
+    XTextProperty name;
+    char *list[] = {"openbox_osd_popup"};
+    char **plist = list;
+    XStringListToTextProperty(plist, 1, &name);
+
+    XSetWMName(obt_display, self->bg, &name);
+    XSetWMName(obt_display, self->text, &name);
+
+    XClassHint *hinttest;
+    hinttest = XAllocClassHint();
+    hinttest->res_name = "openbox_osd_popup";
+    hinttest->res_class = "osd_popup";
+    XSetClassHint(obt_display, self->bg, hinttest);
+    XSetClassHint(obt_display, self->text, hinttest);
+
+    OBT_PROP_SET32(self->bg,   NET_WM_WINDOW_TYPE, ATOM, OBT_PROP_ATOM(NET_WM_WINDOW_TYPE_SPLASH));
+    OBT_PROP_SET32(self->text, NET_WM_WINDOW_TYPE, ATOM, OBT_PROP_ATOM(NET_WM_WINDOW_TYPE_SPLASH));
 
     XMapWindow(obt_display, self->text);
 
@@ -353,6 +373,7 @@ ObIconPopup *icon_popup_new(void)
                                0, 0, 1, 1, 0,
                                RrDepth(ob_rr_inst), InputOutput,
                                RrVisual(ob_rr_inst), 0, NULL);
+    OBT_PROP_SET32(self->icon, NET_WM_WINDOW_TYPE, ATOM, OBT_PROP_ATOM(NET_WM_WINDOW_TYPE_SPLASH));
     XMapWindow(obt_display, self->icon);
 
     self->popup->hasicon = TRUE;
@@ -513,6 +534,8 @@ ObPagerPopup *pager_popup_new(void)
     self->hilight = RrAppearanceCopy(ob_rr_theme->osd_hilite_bg);
     self->unhilight = RrAppearanceCopy(ob_rr_theme->osd_unhilite_bg);
 
+    OBT_PROP_SET32(self->wins, NET_WM_WINDOW_TYPE, ATOM, OBT_PROP_ATOM(NET_WM_WINDOW_TYPE_SPLASH));
+
     self->popup->hasicon = TRUE;
     self->popup->draw_icon = pager_popup_draw_icon;
     self->popup->draw_icon_data = self;
@@ -558,6 +581,7 @@ void pager_popup_delay_show(ObPagerPopup *self, gulong msec,
                                           RrDepth(ob_rr_inst), InputOutput,
                                           RrVisual(ob_rr_inst), CWBorderPixel,
                                           &attr);
+            OBT_PROP_SET32(self->wins[i], NET_WM_WINDOW_TYPE, ATOM, OBT_PROP_ATOM(NET_WM_WINDOW_TYPE_SPLASH));
             XMapWindow(obt_display, self->wins[i]);
         }
 
