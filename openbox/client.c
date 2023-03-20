@@ -2694,6 +2694,18 @@ static void client_calc_layer_internal(ObClient *self)
         client_calc_layer_recursive(sit->data, self, 0);
 }
 
+static gpointer copy_cli(gpointer data, gpointer user_data) {
+  ObClient* original_ObClient = (ObClient*) data;
+  ObClient* new_ObClient = g_new(ObClient, 1);
+  *new_ObClient = *original_ObClient;
+  return new_ObClient;
+}
+// Destroy function
+static void destroy_cli(gpointer data) {
+  ObClient* ObClient_ptr = (ObClient*) data;
+  g_free(ObClient_ptr);
+}
+
 void client_calc_layer(ObClient *self)
 {
     GList *it;
@@ -2718,11 +2730,19 @@ void client_calc_layer(ObClient *self)
     /* now recalc any windows in the fullscreen layer which have not
        had their layer recalced already */
     for (; it; it = g_list_next(it)) {
-        if (window_layer(it->data) < OB_STACKING_LAYER_FULLSCREEN) break;
-        else if (WINDOW_IS_CLIENT(it->data) &&
-                 !WINDOW_AS_CLIENT(it->data)->visited)
-            client_calc_layer_internal(it->data);
-    }
+        if (window_layer(it->data) < OB_STACKING_LAYER_FULLSCREEN) {
+          break;
+        } else if (WINDOW_IS_CLIENT(it->data)) {
+          GList *cli = g_list_copy_deep(it, copy_cli, destroy_cli);
+          //ObClient *cli = copy_cli(it->data, NULL);
+          if (!WINDOW_AS_CLIENT(cli->data)->visited) {
+            client_calc_layer_internal(cli->data);
+          }
+
+          //free(cli);
+          g_list_free(cli);
+        }
+      }
 }
 
 gboolean client_should_show(ObClient *self)
