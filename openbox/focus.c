@@ -194,11 +194,11 @@ ObClient* focus_fallback(gboolean allow_refocus, gboolean allow_pointer,
 void focus_nothing(void)
 {
 
-				gulong netstate[1];
-				if (focus_client) {
-					netstate[0] = 0;
-				  OBT_PROP_SETA32(focus_client->window, NET_WM_STATE, ATOM, netstate, 1);
-				}
+			//	gulong netstate[1];
+			//	if (focus_client) {
+			//		netstate[0] = 0;
+			//	  OBT_PROP_SETA32(focus_client->window, NET_WM_STATE, ATOM, netstate, 1);
+			//	}
     /* nothing is focused, update the colormap and _the root property_ */
     focus_set_client(NULL);
 
