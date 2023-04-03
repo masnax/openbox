@@ -25,8 +25,10 @@
 #include "screen.h"
 #include "openbox.h"
 #include "debug.h"
+#include "obt/prop.h"
 
 #include <X11/Xlib.h>
+#include <X11/Xatom.h>
 #include <glib.h>
 
 typedef enum {
@@ -194,6 +196,9 @@ static ObClient *focus_find_directional(ObClient *c, ObDirection dir,
     best_score = -1;
     best_client = c;
 
+    guint32 last;
+    OBT_PROP_GET32(obt_root(ob_screen), NET_LAST_ACTIVE_WINDOW, WINDOW, &last);
+
     for (it = g_list_first(client_list); it; it = g_list_next(it)) {
         cur = it->data;
 
@@ -209,6 +214,11 @@ static ObClient *focus_find_directional(ObClient *c, ObDirection dir,
             + cur->frame->area.width / 2;
         his_cy = (cur->frame->area.y - my_cy)
             + cur->frame->area.height / 2;
+
+        if (his_cx == 0 && his_cy == 0 && cur->window != last) {
+           best_client = cur;
+           break;
+        }
 
         if (dir == OB_DIRECTION_NORTHEAST || dir == OB_DIRECTION_SOUTHEAST ||
             dir == OB_DIRECTION_SOUTHWEST || dir == OB_DIRECTION_NORTHWEST)
